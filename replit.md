@@ -7,6 +7,7 @@ Eventra is a modern calendar application built with a full-stack TypeScript arch
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Project preferences: React.js with JavaScript (no TypeScript), Vite as build tool, modern styling with non-blue color schemes.
 
 ## System Architecture
 
