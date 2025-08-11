@@ -68,9 +68,9 @@ export function EventForm() {
   };
 
   return (
-    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border card-shadow-lg hover:card-shadow-hover hover-lift transition-all duration-300">
-      <CardHeader className="bg-gradient-to-r from-google-blue/5 to-google-green/5 border-b border-gray-100 dark:border-dark-border">
-        <CardTitle className="text-google-blue flex items-center gap-2 font-semibold">
+    <Card className="bg-white dark:enhanced-card border-gray-200 dark:neon-border card-shadow-lg hover:card-shadow-hover hover-lift transition-all duration-300">
+      <CardHeader className="bg-gradient-to-r from-google-blue/5 to-google-green/5 dark:from-google-blue/10 dark:to-google-green/10 border-b border-gray-100 dark:border-dark-border">
+        <CardTitle className="text-google-blue dark:gradient-text flex items-center gap-2 font-semibold">
           <CalendarPlus className="w-5 h-5" />
           Add New Event
         </CardTitle>

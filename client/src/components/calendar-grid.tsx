@@ -110,7 +110,7 @@ export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, o
             )}
             {dayEvents.length > 0 && (
               <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
-                <div className="bg-google-yellow text-xs px-2 py-1 rounded-full text-gray-800 card-shadow animate-pulse">
+                <div className="bg-google-yellow dark:bg-google-yellow text-xs px-2 py-1 rounded-full text-gray-800 dark:text-gray-900 card-shadow dark:pulse-glow font-medium">
                   {dayEvents.length} event{dayEvents.length > 1 ? 's' : ''}
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, o
   };
 
   return (
-    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border overflow-hidden card-shadow-lg hover:card-shadow-hover transition-all duration-300">
+    <Card className="bg-white dark:enhanced-card border-gray-200 dark:neon-border overflow-hidden card-shadow-lg hover:card-shadow-hover hover:dark:vibrant-glow transition-all duration-300">
       {renderHeader()}
       {renderDaysOfWeek()}
       <div className="fade-in">

@@ -68,7 +68,7 @@ export default function Calendar() {
               <div className="w-8 h-8 bg-google-blue rounded-lg flex items-center justify-center hover-lift card-shadow">
                 <CalendarIcon className="text-white w-4 h-4" />
               </div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-dark-text bg-gradient-to-r from-google-blue to-google-green bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold text-gray-900 dark:gradient-text">
                 Eventra
               </h1>
             </div>
