@@ -8,10 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarPlus } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import type { InsertEvent } from "@shared/schema";
-
 export function EventForm() {
-  const [formData, setFormData] = useState<InsertEvent>({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     date: "",
@@ -23,7 +21,7 @@ export function EventForm() {
   const { toast } = useToast();
 
   const createEventMutation = useMutation({
-    mutationFn: async (eventData: InsertEvent) => {
+    mutationFn: async (eventData) => {
       const response = await apiRequest("POST", "/api/events", eventData);
       return response.json();
     },
@@ -50,7 +48,7 @@ export function EventForm() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title || !formData.date) return;
 

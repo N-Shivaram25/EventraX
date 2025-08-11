@@ -27,7 +27,5 @@ export const insertEventSchema = createInsertSchema(events).omit({
   id: true,
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
-export type InsertEvent = z.infer<typeof insertEventSchema>;
-export type Event = typeof events.$inferSelect;
+// Export schemas for validation
+// Note: Types are removed for JavaScript conversion

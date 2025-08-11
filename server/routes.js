@@ -1,9 +1,8 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertEventSchema } from "@shared/schema";
+import { createServer } from "http";
+import { storage } from "./storage.js";
+import { insertEventSchema } from "../shared/schema.js";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app) {
   
   // Get all events
   app.get("/api/events", async (req, res) => {
@@ -34,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertEventSchema.parse(req.body);
       const event = await storage.createEvent(validatedData);
       res.status(201).json(event);
-    } catch (error: any) {
+    } catch (error) {
       if (error.name === 'ZodError') {
         return res.status(400).json({ message: "Invalid event data", errors: error.errors });
       }
@@ -51,7 +50,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Event not found" });
       }
       res.json(event);
-    } catch (error: any) {
+    } catch (error) {
       if (error.name === 'ZodError') {
         return res.status(400).json({ message: "Invalid event data", errors: error.errors });
       }

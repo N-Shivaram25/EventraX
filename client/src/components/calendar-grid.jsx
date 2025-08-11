@@ -3,17 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Event } from "@shared/schema";
-
-interface CalendarGridProps {
-  currentDate: Date;
-  selectedDate: Date | null;
-  events: Event[];
-  onDateClick: (date: Date) => void;
-  onCurrentDateChange: (date: Date) => void;
-}
-
-export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, onCurrentDateChange }: CalendarGridProps) {
+export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, onCurrentDateChange }) {
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);

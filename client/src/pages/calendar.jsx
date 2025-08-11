@@ -6,17 +6,15 @@ import { CalendarGrid } from "@/components/calendar-grid";
 import { EventForm } from "@/components/event-form";
 import { EventList } from "@/components/event-list";
 import { useTheme } from "@/components/theme-provider";
-import type { Event } from "@shared/schema";
-
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [viewMode, setViewMode] = useState("grid");
   const { theme, toggleTheme } = useTheme();
 
   // Load view mode from localStorage
   useEffect(() => {
-    const storedViewMode = localStorage.getItem('calendarViewMode') as "grid" | "list";
+    const storedViewMode = localStorage.getItem('calendarViewMode');
     if (storedViewMode) {
       setViewMode(storedViewMode);
     }
@@ -27,11 +25,11 @@ export default function Calendar() {
     localStorage.setItem('calendarViewMode', viewMode);
   }, [viewMode]);
 
-  const { data: events = [], isLoading } = useQuery<Event[]>({
+  const { data: events = [], isLoading } = useQuery({
     queryKey: ["/api/events"],
   });
 
-  const handleDateClick = (date: Date) => {
+  const handleDateClick = (date) => {
     setSelectedDate(date);
   };
 

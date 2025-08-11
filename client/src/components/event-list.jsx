@@ -5,20 +5,12 @@ import { CalendarDays, Clock, Trash2 } from "lucide-react";
 import { format, parseISO, isSameDay } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import type { Event } from "@shared/schema";
-
-interface EventListProps {
-  events: Event[];
-  selectedDate?: Date;
-  viewMode: "grid" | "list";
-}
-
-export function EventList({ events, selectedDate, viewMode }: EventListProps) {
+export function EventList({ events, selectedDate, viewMode }) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const deleteEventMutation = useMutation({
-    mutationFn: async (eventId: string) => {
+    mutationFn: async (eventId) => {
       await apiRequest("DELETE", `/api/events/${eventId}`);
     },
     onSuccess: () => {
@@ -37,7 +29,7 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
     },
   });
 
-  const handleDeleteEvent = (eventId: string) => {
+  const handleDeleteEvent = (eventId) => {
     if (confirm("Are you sure you want to delete this event?")) {
       deleteEventMutation.mutate(eventId);
     }
@@ -52,7 +44,7 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
       }
       acc[date].push(event);
       return acc;
-    }, {} as Record<string, Event[]>);
+    }, {});
 
     const sortedDates = Object.keys(eventsByDate).sort();
 
