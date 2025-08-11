@@ -1,0 +1,319 @@
+import React, { useState, useEffect } from 'react';
+import { format, startOfWeek, addDays, startOfMonth, endOfMonth, endOfWeek, isSameMonth, isSameDay, parseISO } from 'date-fns';
+import './App.css';
+
+function App() {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [newEvent, setNewEvent] = useState({ title: '', date: '', time: '', description: '' });
+  const [viewMode, setViewMode] = useState('grid');
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    const storedEvents = localStorage.getItem('calendarEvents');
+    if (storedEvents) {
+      setEvents(JSON.parse(storedEvents));
+    }
+    
+    const storedTheme = localStorage.getItem('calendarTheme');
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+  }, [events]);
+
+  useEffect(() => {
+    localStorage.setItem('calendarTheme', theme);
+    document.body.className = theme;
+  }, [theme]);
+
+  const onDateClick = day => {
+    setSelectedDate(day);
+  };
+
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setNewEvent({ ...newEvent, [name]: value });
+  };
+
+  const handleAddEvent = e => {
+    e.preventDefault();
+    if (!newEvent.title || !newEvent.date) return;
+
+    const eventDateTime = `${newEvent.date}T${newEvent.time || '00:00'}`;
+    const event = {
+      ...newEvent,
+      id: Date.now(),
+      dateTime: eventDateTime,
+      date: newEvent.date
+    };
+
+    setEvents([...events, event]);
+    setNewEvent({ title: '', date: '', time: '', description: '' });
+  };
+
+  const handleDeleteEvent = id => {
+    setEvents(events.filter(event => event.id !== id));
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const renderHeader = () => {
+    const dateFormat = 'MMMM yyyy';
+    return (
+      <div className="header row flex-middle">
+        <div className="column col-start">
+          <div className="icon" onClick={() => setCurrentDate(addDays(currentDate, -1))}>
+            ◀
+          </div>
+        </div>
+        <div className="column col-center">
+          <span>{format(currentDate, dateFormat)}</span>
+        </div>
+        <div className="column col-end">
+          <div className="icon" onClick={() => setCurrentDate(addDays(currentDate, 1))}>
+            ▶
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderDays = () => {
+    const dateFormat = 'EEE';
+    const days = [];
+    let startDate = startOfWeek(currentDate);
+
+    for (let i = 0; i < 7; i++) {
+      days.push(
+        <div className="column col-center" key={i}>
+          {format(addDays(startDate, i), dateFormat)}
+        </div>
+      );
+    }
+
+    return <div className="days row">{days}</div>;
+  };
+
+  const renderCells = () => {
+    const monthStart = startOfMonth(currentDate);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
+
+    const dateFormat = 'd';
+    const rows = [];
+
+    let days = [];
+    let day = startDate;
+    let formattedDate = '';
+
+    while (day <= endDate) {
+      for (let i = 0; i < 7; i++) {
+        formattedDate = format(day, dateFormat);
+        const cloneDay = day;
+        const dayEvents = events.filter(event => 
+          isSameDay(parseISO(event.dateTime), cloneDay)
+        );
+
+        days.push(
+          <div
+            className={`column cell ${
+              !isSameMonth(day, monthStart)
+                ? 'disabled'
+                : isSameDay(day, selectedDate)
+                ? 'selected'
+                : ''
+            }`}
+            key={day}
+            onClick={() => onDateClick(cloneDay)}
+          >
+            <span className="number">{formattedDate}</span>
+            <span className="bg">{formattedDate}</span>
+            {dayEvents.length > 0 && (
+              <div className="event-indicator">
+                {dayEvents.length} event{dayEvents.length > 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
+        );
+        day = addDays(day, 1);
+      }
+      rows.push(
+        <div className="row" key={day}>
+          {days}
+        </div>
+      );
+      days = [];
+    }
+    return <div className="body">{rows}</div>;
+  };
+
+  const renderListView = () => {
+    const datesWithEvents = {};
+    
+    events.forEach(event => {
+      const date = event.date;
+      if (!datesWithEvents[date]) {
+        datesWithEvents[date] = [];
+      }
+      datesWithEvents[date].push(event);
+    });
+
+    const sortedDates = Object.keys(datesWithEvents).sort();
+
+    return (
+      <div className="list-view">
+        {sortedDates.length > 0 ? (
+          sortedDates.map(date => (
+            <div key={date} className="list-day">
+              <h3>{format(parseISO(date), 'PPPP')}</h3>
+              <div className="events-container">
+                {datesWithEvents[date].map(event => (
+                  <div key={event.id} className="event-item">
+                    <div className="event-time">
+                      {event.time || 'All day'}
+                    </div>
+                    <div className="event-details">
+                      <h4>{event.title}</h4>
+                      {event.description && <p>{event.description}</p>}
+                    </div>
+                    <button 
+                      className="delete-btn"
+                      onClick={() => handleDeleteEvent(event.id)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="no-events">No events scheduled</div>
+        )}
+      </div>
+    );
+  };
+
+  const renderEventDetails = () => {
+    if (!selectedDate) return null;
+
+    const dayEvents = events.filter(event => 
+      isSameDay(parseISO(event.dateTime), selectedDate)
+    );
+
+    return (
+      <div className="event-details-panel">
+        <h3>{format(selectedDate, 'PPPP')}</h3>
+        {dayEvents.length > 0 ? (
+          <div className="events-list">
+            {dayEvents.map(event => (
+              <div key={event.id} className="event">
+                <div className="event-header">
+                  <h4>{event.title}</h4>
+                  <button 
+                    className="delete-btn"
+                    onClick={() => handleDeleteEvent(event.id)}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="event-time">
+                  {event.time || 'All day'}
+                </div>
+                {event.description && (
+                  <p className="event-description">{event.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No events for this day</p>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className={`calendar-app ${theme}`}>
+      <div className="controls">
+        <button onClick={() => setCurrentDate(new Date())}>Today</button>
+        <button onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}>
+          {viewMode === 'grid' ? 'List View' : 'Grid View'}
+        </button>
+        <button onClick={toggleTheme}>
+          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+        </button>
+      </div>
+
+      <div className="calendar-container">
+        {viewMode === 'grid' ? (
+          <div className="calendar">
+            {renderHeader()}
+            {renderDays()}
+            {renderCells()}
+          </div>
+        ) : (
+          renderListView()
+        )}
+
+        <div className="event-section">
+          <div className="add-event">
+            <h3>Add New Event</h3>
+            <form onSubmit={handleAddEvent}>
+              <div className="form-group">
+                <label>Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={newEvent.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={newEvent.date}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Time (optional)</label>
+                <input
+                  type="time"
+                  name="time"
+                  value={newEvent.time}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Description (optional)</label>
+                <textarea
+                  name="description"
+                  value={newEvent.description}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <button type="submit">Add Event</button>
+            </form>
+          </div>
+
+          {viewMode === 'grid' && renderEventDetails()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
