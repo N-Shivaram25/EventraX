@@ -73,23 +73,23 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
     }
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 fade-in">
         {sortedDates.map(date => (
-          <Card key={date} className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border">
-            <CardHeader className="bg-google-blue text-white">
-              <CardTitle className="text-lg">
+          <Card key={date} className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border card-shadow-lg hover:card-shadow-hover hover-lift transition-all duration-300">
+            <CardHeader className="bg-gradient-to-r from-google-blue to-google-blue/90 text-white">
+              <CardTitle className="text-lg font-semibold">
                 {format(parseISO(date), 'PPPP')}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 {eventsByDate[date].map(event => (
-                  <div key={event.id} className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-dark-bg rounded-lg">
-                    <div className="flex-shrink-0 w-20 text-sm text-google-green font-medium">
+                  <div key={event.id} className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-dark-bg rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 card-shadow hover-lift">
+                    <div className="flex-shrink-0 w-20 text-sm text-google-green font-semibold">
                       {event.time || 'All day'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-base font-medium text-gray-900 dark:text-dark-text mb-1">
+                      <h4 className="text-base font-semibold text-gray-900 dark:text-dark-text mb-1">
                         {event.title}
                       </h4>
                       {event.description && (
@@ -103,7 +103,7 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
                       size="sm"
                       onClick={() => handleDeleteEvent(event.id)}
                       disabled={deleteEventMutation.isPending}
-                      className="text-google-red hover:text-red-700 hover:bg-red-50"
+                      className="text-google-red hover:text-red-700 hover:bg-red-50 hover-lift focus-ring"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -125,20 +125,20 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
   );
 
   return (
-    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border">
-      <CardHeader>
-        <CardTitle className="text-google-blue flex items-center gap-2">
+    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border card-shadow-lg hover:card-shadow-hover transition-all duration-300">
+      <CardHeader className="bg-gradient-to-r from-google-blue/5 to-google-green/5 border-b border-gray-100 dark:border-dark-border">
+        <CardTitle className="text-google-blue flex items-center gap-2 font-semibold">
           <CalendarDays className="w-5 h-5" />
           {format(selectedDate, 'PPPP')}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6">
         {dayEvents.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-3 fade-in">
             {dayEvents.map(event => (
-              <div key={event.id} className="bg-gray-50 dark:bg-dark-bg rounded-lg p-4 border-l-4 border-google-blue">
+              <div key={event.id} className="bg-gray-50 dark:bg-dark-bg rounded-lg p-4 border-l-4 border-google-blue hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 hover-lift card-shadow">
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium text-gray-900 dark:text-dark-text">
+                  <h4 className="font-semibold text-gray-900 dark:text-dark-text">
                     {event.title}
                   </h4>
                   <Button
@@ -146,13 +146,13 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
                     size="sm"
                     onClick={() => handleDeleteEvent(event.id)}
                     disabled={deleteEventMutation.isPending}
-                    className="text-google-red hover:text-red-700 hover:bg-red-50"
+                    className="text-google-red hover:text-red-700 hover:bg-red-50 hover-lift focus-ring"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
                 {event.time && (
-                  <div className="text-sm text-google-green mb-1 flex items-center gap-1">
+                  <div className="text-sm text-google-green mb-1 flex items-center gap-1 font-medium">
                     <Clock className="w-3 h-3" />
                     {event.time}
                   </div>
@@ -166,7 +166,7 @@ export function EventList({ events, selectedDate, viewMode }: EventListProps) {
             ))}
           </div>
         ) : (
-          <p className="text-gray-600 dark:text-dark-text-secondary">
+          <p className="text-gray-600 dark:text-dark-text-secondary text-center py-8">
             No events for this day
           </p>
         )}

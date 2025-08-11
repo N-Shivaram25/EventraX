@@ -68,17 +68,17 @@ export function EventForm() {
   };
 
   return (
-    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border">
-      <CardHeader>
-        <CardTitle className="text-google-blue flex items-center gap-2">
+    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border card-shadow-lg hover:card-shadow-hover hover-lift transition-all duration-300">
+      <CardHeader className="bg-gradient-to-r from-google-blue/5 to-google-green/5 border-b border-gray-100 dark:border-dark-border">
+        <CardTitle className="text-google-blue flex items-center gap-2 font-semibold">
           <CalendarPlus className="w-5 h-5" />
           Add New Event
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title" className="text-gray-700 dark:text-dark-text">
+      <CardContent className="p-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-gray-700 dark:text-dark-text font-medium">
               Title *
             </Label>
             <Input
@@ -88,12 +88,12 @@ export function EventForm() {
               onChange={handleChange}
               required
               placeholder="Enter event title"
-              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text"
+              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text focus-ring transition-all duration-200"
             />
           </div>
           
-          <div>
-            <Label htmlFor="date" className="text-gray-700 dark:text-dark-text">
+          <div className="space-y-2">
+            <Label htmlFor="date" className="text-gray-700 dark:text-dark-text font-medium">
               Date *
             </Label>
             <Input
@@ -103,35 +103,35 @@ export function EventForm() {
               value={formData.date}
               onChange={handleChange}
               required
-              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text"
+              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text focus-ring transition-all duration-200"
             />
           </div>
           
-          <div>
-            <Label htmlFor="time" className="text-gray-700 dark:text-dark-text">
+          <div className="space-y-2">
+            <Label htmlFor="time" className="text-gray-700 dark:text-dark-text font-medium">
               Time
             </Label>
             <Input
               id="time"
               name="time"
               type="time"
-              value={formData.time}
+              value={formData.time || ""}
               onChange={handleChange}
-              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text"
+              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text focus-ring transition-all duration-200"
             />
           </div>
           
-          <div>
-            <Label htmlFor="description" className="text-gray-700 dark:text-dark-text">
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-gray-700 dark:text-dark-text font-medium">
               Description
             </Label>
             <Textarea
               id="description"
               name="description"
-              value={formData.description}
+              value={formData.description || ""}
               onChange={handleChange}
               placeholder="Enter event description (optional)"
-              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text resize-vertical"
+              className="bg-white dark:bg-dark-bg border-gray-300 dark:border-dark-border text-gray-900 dark:text-dark-text resize-vertical focus-ring transition-all duration-200"
               rows={3}
             />
           </div>
@@ -139,10 +139,13 @@ export function EventForm() {
           <Button
             type="submit"
             disabled={createEventMutation.isPending}
-            className="w-full bg-google-blue hover:bg-blue-600 text-white"
+            className="w-full bg-google-blue hover:bg-blue-600 text-white hover-lift card-shadow focus-ring transition-all duration-200 font-medium"
           >
             {createEventMutation.isPending ? (
-              "Adding..."
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Adding...
+              </div>
             ) : (
               <>
                 <CalendarPlus className="w-4 h-4 mr-2" />

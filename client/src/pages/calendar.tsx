@@ -48,37 +48,43 @@ export default function Calendar() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center">
-        <div className="text-gray-600 dark:text-dark-text-secondary">Loading calendar...</div>
+        <div className="text-center fade-in">
+          <div className="w-16 h-16 border-4 border-google-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-gray-600 dark:text-dark-text-secondary font-medium">Loading Eventra...</div>
+          <div className="text-sm text-gray-500 dark:text-dark-text-secondary mt-2">Preparing your calendar experience</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg transition-colors duration-300 fade-in">
       {/* Header */}
-      <header className="bg-white dark:bg-dark-surface shadow-sm border-b border-gray-200 dark:border-dark-border">
+      <header className="bg-white dark:bg-dark-surface shadow-sm border-b border-gray-200 dark:border-dark-border glass-effect sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-google-blue rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-3 slide-in">
+              <div className="w-8 h-8 bg-google-blue rounded-lg flex items-center justify-center hover-lift card-shadow">
                 <CalendarIcon className="text-white w-4 h-4" />
               </div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-dark-text">Eventra</h1>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-dark-text bg-gradient-to-r from-google-blue to-google-green bg-clip-text text-transparent">
+                Eventra
+              </h1>
             </div>
             
             {/* Controls */}
             <div className="flex items-center space-x-3">
               <Button 
                 onClick={handleTodayClick}
-                className="bg-google-blue hover:bg-blue-600 text-white"
+                className="bg-google-blue hover:bg-blue-600 text-white hover-lift card-shadow focus-ring"
               >
                 Today
               </Button>
               <Button
                 variant="outline"
                 onClick={toggleViewMode}
-                className="bg-gray-100 dark:bg-dark-border text-gray-700 dark:text-dark-text border-gray-300 dark:border-dark-border hover:bg-gray-200 dark:hover:bg-gray-600"
+                className="bg-gray-100 dark:bg-dark-border text-gray-700 dark:text-dark-text border-gray-300 dark:border-dark-border hover:bg-gray-200 dark:hover:bg-gray-600 hover-lift card-shadow focus-ring"
               >
                 {viewMode === "grid" ? (
                   <>
@@ -96,7 +102,7 @@ export default function Calendar() {
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
-                className="text-gray-500 dark:text-dark-text-secondary hover:text-gray-700 dark:hover:text-dark-text"
+                className="text-gray-500 dark:text-dark-text-secondary hover:text-gray-700 dark:hover:text-dark-text hover-lift focus-ring"
               >
                 {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
               </Button>
@@ -133,7 +139,7 @@ export default function Calendar() {
             {viewMode === "grid" && (
               <EventList
                 events={events}
-                selectedDate={selectedDate}
+                selectedDate={selectedDate || undefined}
                 viewMode={viewMode}
               />
             )}

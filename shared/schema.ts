@@ -14,7 +14,7 @@ export const events = pgTable("events", {
   title: text("title").notNull(),
   description: text("description"),
   date: text("date").notNull(), // YYYY-MM-DD format
-  time: text("time"), // HH:MM format, optional
+  time: text("time").default(""), // HH:MM format, optional
   dateTime: text("dateTime").notNull(), // ISO string for sorting/filtering
 });
 

@@ -84,12 +84,12 @@ export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, o
           <div
             key={day.toString()}
             className={cn(
-              "h-20 p-2 border-b border-gray-200 dark:border-dark-border cursor-pointer transition-colors duration-200 relative",
+              "h-20 p-2 border-b border-gray-200 dark:border-dark-border cursor-pointer transition-all duration-200 relative hover-lift group",
               {
                 "bg-gray-50 dark:bg-dark-bg": !isCurrentMonth,
-                "bg-white dark:bg-dark-surface hover:bg-blue-50 dark:hover:bg-gray-700": isCurrentMonth,
-                "bg-blue-50 dark:bg-blue-900 ring-2 ring-google-blue ring-opacity-50": isSelected,
-                "bg-blue-100 dark:bg-blue-900 ring-2 ring-google-blue": isToday && !isSelected,
+                "bg-white dark:bg-dark-surface hover:bg-blue-50 dark:hover:bg-gray-700 hover:card-shadow": isCurrentMonth,
+                "bg-blue-50 dark:bg-blue-900 ring-2 ring-google-blue ring-opacity-50 card-shadow": isSelected,
+                "bg-blue-100 dark:bg-blue-900 ring-2 ring-google-blue card-shadow": isToday && !isSelected,
               }
             )}
             onClick={() => onDateClick(cloneDay)}
@@ -110,7 +110,7 @@ export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, o
             )}
             {dayEvents.length > 0 && (
               <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
-                <div className="bg-google-yellow text-xs px-2 py-1 rounded-full text-gray-800">
+                <div className="bg-google-yellow text-xs px-2 py-1 rounded-full text-gray-800 card-shadow animate-pulse">
                   {dayEvents.length} event{dayEvents.length > 1 ? 's' : ''}
                 </div>
               </div>
@@ -131,10 +131,10 @@ export function CalendarGrid({ currentDate, selectedDate, events, onDateClick, o
   };
 
   return (
-    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border overflow-hidden">
+    <Card className="bg-white dark:bg-dark-surface border-gray-200 dark:border-dark-border overflow-hidden card-shadow-lg hover:card-shadow-hover transition-all duration-300">
       {renderHeader()}
       {renderDaysOfWeek()}
-      <div>
+      <div className="fade-in">
         {renderCells()}
       </div>
     </Card>
